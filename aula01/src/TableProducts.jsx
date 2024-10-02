@@ -1,4 +1,4 @@
-import TableProductsLine from "./TableProductsLine"
+import TableProductsLine from "./TableProductsLine";
 
 const TableProducts = ({ items }) => {
     return (
