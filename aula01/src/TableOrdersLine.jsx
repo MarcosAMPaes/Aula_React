@@ -1,11 +1,7 @@
 import { NumberFormatter,CurrencyFormatter, DateTimeFormatter } from "./formatters";
 
-const TableOrdersLine = ({ item }) => {
+const TableOrdersLine = ({ item, handleCancelOrder, handleEvolveOrder }) => {
 
-    const handleCancelOrder = (orderId) => {
-        const modal = new bootstrap.Modal(document.getElementById('modalCancelOrder'));
-        modal.show()
-    }
     return (
         <tr>
             <td>{NumberFormatter.format(item.id,6)}</td>
@@ -18,12 +14,16 @@ const TableOrdersLine = ({ item }) => {
                 <button className="btn btn-outline-info btn-sm me-2">
                     <i className="bi bi-zoom-in"></i>
                 </button>
-                <button className="btn btn-outline-success btn-sm me-1" tittle="Progredir Estado">
-                    <i className="bi bi-arrow-right-circle"></i>
-                </button>
+                { (["Cancelado", "Entregue"].includes(item.estado)) &&
                 <button className="btn btn-outline-danger btn-sm" tittle="Cancelar Pedido" onClick={() => handleCancelOrder(item.id)}>
                     <i className="bi bi-x-circle"></i>
                 </button>
+                }
+                { (item.estado == "pendente") &&
+                <button className="btn btn-outline-success btn-sm me-1" tittle="Progredir Estado" onClick={() => handleEvolveOrder(item.id)}>
+                    <i className="bi bi-arrow-right-circle"></i>
+                </button>
+                }
             </td>
         </tr>
     );
