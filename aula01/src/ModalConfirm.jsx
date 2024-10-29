@@ -1,25 +1,25 @@
 import React from 'react'
 
-const ModalConfirm = ({question, confirmAction, cancelAction, modalId}) => {
-  return (
-    <div className="modal fade" id={modalId} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
-    <div className="modal-dialog">
-        <div className="modal-content">
-        <div className="modal-header">
-            <h1 className="modal-title fs-5">Confirmação</h1>
-            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+const ModalConfirm = ({ question, confirmAction, cancelAction, modalId }) => {
+    return (
+        <div className="modal fade" id={modalId} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h1 className="modal-title fs-5">Confirmação</h1>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div className="modal-body">
+                        {question}
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelAction}>Não</button>
+                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={confirmAction}>Sim</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div className="modal-body">
-            {question}
-        </div>
-        <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelAction}>Cancelar</button>
-            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={confirmAction}>Confirmar</button>
-        </div>
-        </div>
-    </div>
-    </div>
-  )
+    )
 }
 
 export default ModalConfirm

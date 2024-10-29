@@ -24,7 +24,16 @@ const CurrencyFormatter = new Intl.NumberFormat('pt-BR', {
 
 const StringFormatter = {
     Capitalize: (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        const exceptions = ['do', 'da', 'de', 'o', 'a', 'e'];
+        const palavras = str.toLowerCase().split(' ');
+        const palavrasFormatadas = palavras.map((palavra, index) => {
+            if (exceptions.includes(palavra) && index !== 0) {
+                return palavra;
+            } else {
+                return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+            }
+        });
+        return palavrasFormatadas.join(' ');
     }
 };
 
