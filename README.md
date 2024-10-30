@@ -36,7 +36,7 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 ---
 
 ## 📂 Estrutura de Pastas
-
+```
 ├── public
 │   └── index.html  # Arquivo principal da aplicação
 ├── src
@@ -45,5 +45,5 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 │   └── main.jsx    # Ponto de entrada para renderização do React
 ├── package.json
 └── vite.config.js  # Configuração do Vite
-
+```
 ---
