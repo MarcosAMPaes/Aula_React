@@ -2,6 +2,8 @@ import React from 'react'
 import TableUsersLine from './TableUsersLine'
 
 const TableUsers = ( {items, handleDeleteUser }) => {
+
+    console.log(items)
   return (
     <table className="table table-striped">
             <thead>
