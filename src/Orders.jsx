@@ -17,6 +17,7 @@ const Orders = () => {
         api.get(ordersEndpoint)
             .then((response) => {
                 setOrders(response.data);
+                setFilteredOrders(response.data);
             })
             .catch((error) => {
                 console.log(error);

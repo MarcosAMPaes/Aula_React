@@ -5,8 +5,8 @@ const TableProducts = ({ items, handleExcludeProduct }) => {
         <table className="table table-striped">
             <thead>
                 <tr>
+                    <th>Produto</th>
                     <th>Código</th>
-                    <th>Nome</th>
                     <th>Preço</th>
                     <th>Estoque</th>
                     <th>Ações</th>

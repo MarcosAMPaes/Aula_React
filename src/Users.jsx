@@ -1,8 +1,15 @@
-import React from 'react'
+import { useEffect, useState } from "react";
+import TableUsers from './TableUsers';
+import Loading from "./Loading";
+import api from "./axiosApi";
+import ModalConfirm from "./ModalConfirm";
+import NoProducts from "./NoProducts";
+import SearchBar from './SearchBar';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(0);
 
     const loadUsers = () => {
@@ -11,6 +18,7 @@ const Users = () => {
         api.get(usersEndpoint)
             .then((response) => {
                 setUsers(response.data);
+                setFilteredUsers(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -37,14 +45,34 @@ const Users = () => {
 
     const handleDeleteUser = (userId) => {
         setSelectedUserId(userId);
-        const modal = new bootstrap.Modal(document.getElementById('modalCancelOrder'));
+        const modal = new bootstrap.Modal(document.getElementById('modalDeleteuser'));
+        modal.show();
+    }
+
+    const handleSearch = (searchTerm) => {
+        const filtered = users.filter((user) =>
+            user.nome.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredUsers(filtered);
+    };
 
     useEffect(() => {
         loadUsers();
     }, []);
+
+
   return (
-    <div>Users</div>
-  )
+        <>
+            <SearchBar onSearch={handleSearch} title="Usuários" />
+            {filteredUsers.length > 0 ?
+            <>
+                <ModalConfirm modalId="modalDeleteuser" question="Deseja realmente excluir este usúario?" confirmAction={() => deleteUser(selectedUserId)}/>
+                <TableUsers items={filteredUsers} handleDeleteUser={handleDeleteUser}/>
+            </>:
+                (!loading && <NoProducts />)}
+            {loading && <Loading />}
+        </>
+    );
 }
 
 export default Users

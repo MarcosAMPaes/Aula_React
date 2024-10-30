@@ -5,6 +5,7 @@ import Layout from "./Layout";
 import NotFound from "./NotFound";
 import Orders from "./Orders";
 import OrderDetails from "./OrderDetails";
+import Users from "./Users";
 
 const App = () => {
     return (
@@ -15,6 +16,7 @@ const App = () => {
                     <Route path="/products" element={<Products />} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/orders/:id" element={<OrderDetails />} />
+                    <Route path="/users" element={<Users />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
