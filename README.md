@@ -45,3 +45,5 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 │   └── main.jsx    # Ponto de entrada para renderização do React
 ├── package.json
 └── vite.config.js  # Configuração do Vite
+
+---
