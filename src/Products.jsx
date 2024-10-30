@@ -42,7 +42,7 @@ const Products = () => {
 
     const handleExcludeProduct = (ProductId) => {
         setSelectedProductId(ProductId);
-        const modal = new bootstrap.Modal(document.getElementById('modalCancelOrder'));
+        const modal = new bootstrap.Modal(document.getElementById('modalExcludeProduct'));
         modal.show();
     }
 
