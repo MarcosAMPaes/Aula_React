@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { NumberFormatter, CurrencyFormatter } from './formatters';
 
 const TableProductsLine = ({ item, handleExcludeProduct }) => {
@@ -24,6 +25,9 @@ const TableProductsLine = ({ item, handleExcludeProduct }) => {
                 <button className="btn btn-outline-danger btn-sm" title="Excluir Produto" onClick={() => handleExcludeProduct(item.id)}>
                     <i className="bi bi-x-circle"></i>
                 </button>
+                <Link className="btn btn-outline-info btn-sm ms-1" title="Alterar Produto" to={`/products/${item.id}`}>
+                    <i className="bi bi-pencil-square"></i>
+                </Link>
             </td>
         </tr>
     )
