@@ -1,9 +1,6 @@
-import React from 'react'
 import TableUsersLine from './TableUsersLine'
 
 const TableUsers = ( {items, handleDeleteUser }) => {
-
-    console.log(items)
   return (
     <table className="table table-striped">
             <thead>
@@ -16,10 +13,10 @@ const TableUsers = ( {items, handleDeleteUser }) => {
                 </tr>
             </thead>
             <tbody>
-                {items.map(p => <TableUsersLine item={p} key={p.id} handleDeleteUser={handleDeleteUser} />)}
+                {items.map(u => <TableUsersLine item={u} key={u.id} handleDeleteUser={handleDeleteUser} />)}
             </tbody>
         </table>
-  )
+  );
 }
 
-export default TableUsers
+export default TableUsers;

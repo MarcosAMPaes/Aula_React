@@ -30,12 +30,13 @@ const Users = () => {
 
     const deleteUser = (userId) => {
         setLoading(true);
-        api.post("excluir_usuario", {"id_usuario": userId})
+        api.postForm("excluir_usuario", {"id_usuario": userId})
             .then(response => {
                 if (response.status === 204)
                     loadUsers();
             })
             .catch(error => {
+                console.log(userId);
                 console.error('Erro ao excluir o usuário:', error);
             })
             .finally(() => {
@@ -66,7 +67,7 @@ const Users = () => {
             <SearchBar onSearch={handleSearch} title="Usuários" />
             {filteredUsers.length > 0 ?
             <>
-                <ModalConfirm modalId="modalDeleteuser" question="Deseja realmente excluir este usúario?" confirmAction={() => deleteUser(selectedUserId)}/>
+                <ModalConfirm modalId="modalDeleteuser" question="Deseja realmente excluir este usuário?" confirmAction={() => deleteUser(selectedUserId)}/>
                 <TableUsers items={filteredUsers} handleDeleteUser={handleDeleteUser}/>
             </>:
                 (!loading && <NoProducts />)}

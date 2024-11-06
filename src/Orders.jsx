@@ -17,7 +17,6 @@ const Orders = () => {
         api.get(ordersEndpoint)
             .then((response) => {
                 setOrders(response.data);
-                setFilteredOrders(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -29,7 +28,7 @@ const Orders = () => {
 
     const cancelOrder = (orderId) => {
         setLoading(true);
-        api.post(`cancelar_pedido/${orderId}`)
+        api.postForm("cancelar_pedido", {"id_pedido": orderId})
             .then(response => {
                 if (response.status === 204)
                     loadOrders(orderState);
@@ -44,7 +43,7 @@ const Orders = () => {
 
     const evolveOrder = (orderId) => {
         setLoading(true);
-        api.post(`evoluir_pedido/${orderId}`)
+        api.postForm("evoluir_pedido", {"id_pedido": orderId})
             .then(response => {
                 if (response.status === 204)
                     loadOrders(orderState);

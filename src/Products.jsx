@@ -28,9 +28,9 @@ const Products = () => {
             });
     }
 
-    const excludeProduct = (ProductId) => {
+    const deleteProduct = (ProductId) => {
         setLoading(true);
-        api.post("excluir_produto", {"id_produto": ProductId})
+        api.postForm("excluir_produto", {"id_produto": ProductId})
             .then(response => {
                 if (response.status === 204)
                     loadProducts()
@@ -43,9 +43,9 @@ const Products = () => {
             });
     };
 
-    const handleExcludeProduct = (ProductId) => {
+    const handleDeleteProduct = (ProductId) => {
         setSelectedProductId(ProductId);
-        const modal = new bootstrap.Modal(document.getElementById('modalExcludeProduct'));
+        const modal = new bootstrap.Modal(document.getElementById('modalDeleteProduct'));
         modal.show();
     }
 
@@ -66,9 +66,9 @@ const Products = () => {
             <SearchBar onSearch={handleSearch} title = "Produtos"/>
             {filteredProducts.length > 0 ?
             <>
-                <ModalConfirm modalId="modalExcludeProduct" question="Deseja realmente excluir o Produto?" confirmAction={() => excludeProduct(selectedProductId)}
+                <ModalConfirm modalId="modalDeleteProduct" question="Deseja realmente excluir o Produto?" confirmAction={() => deleteProduct(selectedProductId)}
                     />
-                <TableProducts items={filteredProducts} handleExcludeProduct={handleExcludeProduct}/>
+                <TableProducts items={filteredProducts} handleDeleteProduct={handleDeleteProduct}/>
             </>:
                 (!loading && <NoProducts />)}
             {loading && <Loading />}

@@ -1,6 +1,6 @@
 import TableProductsLine from "./TableProductsLine"
 
-const TableProducts = ({ items, handleExcludeProduct }) => {
+const TableProducts = ({ items, handleDeleteProduct }) => {
     return (
         <table className="table table-striped">
             <thead>
@@ -13,7 +13,7 @@ const TableProducts = ({ items, handleExcludeProduct }) => {
                 </tr>
             </thead>
             <tbody>
-                {items.map(p => <TableProductsLine item={p} key={p.id} handleExcludeProduct={handleExcludeProduct} />)}
+                {items.map(p => <TableProductsLine item={p} key={p.id} handleDeleteProduct={handleDeleteProduct} />)}
             </tbody>
         </table>
     )

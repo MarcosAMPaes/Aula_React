@@ -9,7 +9,7 @@ const FormInput = ({ type, field, onChange, label, value, error, autofocus = fal
             id={field}
             name={field}
             placeholder=""
-            className={`form-control ${error && 'is-invalid'}`}
+            className={`form-control ${error ? "is-invalid" : "is-valid"}`}
             value={value || ''}
             onChange={onChange}
             autoFocus={autofocus}

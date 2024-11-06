@@ -8,7 +8,7 @@ const FormTextArea = ({  field, onChange, label, value, error, autofocus = false
                 id={field}
                 name={field}
                 placeholder=""
-                className={`form-control ${error && 'is-invalid'}`}
+                className={`form-control ${error ? "is-invalid" : "is-valid"}`}
                 onChange={onChange}
                 autoFocus={autofocus} style={{height: '6rem'}}
                 value={value || ''}></textarea>

@@ -1,70 +1,79 @@
-import { useNavigate, useParams } from 'react-router-dom'; 
-import FormButtons from './FormButtons';
-import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ProductForm from './ProductForm';
-import api from './axiosApi';
-import Loading from "./Loading";
-import handleChange from './HandleChange';
- 
-const EditProduct = () => { 
-    const [inputs, setInputs] = useState({}); 
-    const [errors, setErrors] = useState({}); 
+import { useEffect, useState } from 'react';
+import api from "./axiosApi";
+import FormButtons from './FormButtons';
+import handleChange from './handleChange';
+import Loading from './Loading';
+import parseErros from './parseErros';
+
+const EditProduct = () => {
+    const [inputs, setInputs] = useState({});
+    const [errors, setErrors] = useState({});
+    const [modal, setModal] = useState(undefined);
     const [loading, setLoading] = useState(true);
-    const [modal, setModal] = useState(undefined); 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
-    function localHandleChange(e) { 
-        handleChange(e, inputs, setInputs); 
-    }
-
-    function handleSubmit(e) { 
-        e.preventDefault();
-        api.post("/alterar_produto", inputs)
-        .then(() => {
-            navigate("/products");
-        })
-        .catch(error => {
-            console.error("Erro ao alterar o produto:", error);
-            setErrors(error.response?.data);
-        });
+    const idProduto = useParams().id;
+    if (!idProduto) {
+        navigate("/products");
     }
 
     function loadProductById(id) {
+        setLoading(true);
         api.get(`obter_produto/${id}`)
-        .then(response => {
-            setInputs(response.data);
-        })
-        .catch(error => {
-            console.error('Erro ao obter o produto:', error);
-        })
-        .finally(() => {
-            setLoading(false);
-        });
+            .then(response => {
+                setInputs(response.data);
+            })
+            .catch(error => {
+                console.error('Erro ao carregar produto:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }
- 
-    const idProduto = useParams().id; 
-    if (!idProduto) { 
-        navigate("/products"); 
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        setLoading(true);
+        api.post("/alterar_produto", inputs)
+            .then((response) => {                
+                if (response.status === 204) {
+                    navigate("/products");
+                } else {
+                    console.log(response);
+                }
+            })
+            .catch((error) => {
+                if (error && error.response && error.response.data)
+                    setErrors(parseErros(error.response.data));
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }
-    
+
+    function localHandleChange(event) {
+        handleChange(event, inputs, setInputs);
+    }
+
     useEffect(() => {
-        setInputs({...inputs, id: idProduto});
+        setInputs({ ...inputs, id: idProduto });
         loadProductById(idProduto);
     }, [idProduto]);
 
-
-    return ( 
+    return (
         <>
             <div className="d-flex justify-content-between align-items-center">
-                <h1>Alteração do Produto</h1>
-                <form action="" onSubmit={handleSubmit} noValidate autoComplete='off'>
-                    <ProductForm handleChange={localHandleChange} inputs={inputs} errors={errors} isNew={false}/>
-                    <FormButtons cancelTarget="/products"/>
-                </form>
-                {loading && <Loading/>}
+                <h1>Alteração de Produto</h1>
             </div>
-        </> 
-    ); 
-} 
- 
+            <form onSubmit={handleSubmit} noValidate autoComplete='off'>
+                <ProductForm handleChange={localHandleChange} inputs={inputs} errors={errors} isNew={false} />
+                <FormButtons cancelTarget="/products" />
+            </form>
+            {loading && <Loading />}
+        </>
+    );
+}
+
 export default EditProduct;
