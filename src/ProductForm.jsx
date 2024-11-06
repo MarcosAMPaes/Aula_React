@@ -14,10 +14,10 @@ const ProductForm = ({ handleChange, inputs, errors, isNew}) => {
             <div className="col-12 mb-3">
                 <CleaveInput type="text" field="preco" label="Preço" onChange={handleChange} value={inputs.preco} error={errors?.preco} options={{ numeral: true, numeralThousandsGroupStyle: 'thousand', prefix: 'R$ ', rawValueTrimPrefix: true, delimiter:'.', numeralDecimalMark:','}}/>
             </div>
-            <div className="col-12 mb-3">
+            <div className="col-6 mb-3">
                 <FormTextArea field="descricao" label="Descricão" onChange={handleChange} value={inputs.descricao} error={errors?.descricao}/>
             </div>
-            <div className="col-12 mb-3">
+            <div className="col-6 mb-3">
                 <CleaveInput 
                     type="text" 
                     field="estoque" 
