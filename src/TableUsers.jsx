@@ -1,13 +1,14 @@
+import PropTypes from 'prop-types';
 import TableUsersLine from './TableUsersLine'
 
-const TableUsers = ( {items, handleDeleteUser }) => {
-  return (
-    <table className="table table-striped">
+const TableUsers = ({ items, handleDeleteUser }) => {
+    return (
+        <table className="table table-striped">
             <thead>
                 <tr>
-                    <th>Id do Usuario</th>
+                    <th>Código</th>
                     <th>Nome</th>
-                    <th>Email</th>
+                    <th>E-mail</th>
                     <th>Telefone</th>
                     <th>Ações</th>
                 </tr>
@@ -16,7 +17,12 @@ const TableUsers = ( {items, handleDeleteUser }) => {
                 {items.map(u => <TableUsersLine item={u} key={u.id} handleDeleteUser={handleDeleteUser} />)}
             </tbody>
         </table>
-  );
+    );
 }
+
+TableUsers.propTypes = {
+    items: PropTypes.array.isRequired,
+    handleDeleteUser: PropTypes.func.isRequired
+};
 
 export default TableUsers;

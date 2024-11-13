@@ -1,15 +1,21 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
 
-const FormButtons = ({cancelTarget}) => {
-  return (
-    <>
+const FormButtons = ({ cancelTarget }) => {
+    return (
         <div>
-            <Link to={cancelTarget} className="btn btn-secondary me-2">Cancelar</Link>
-            <button type="submit" className="btn btn-primary">Salvar</button>
+            <Link to={cancelTarget} className="btn btn-secondary me-2">
+                Cancelar
+            </Link>
+            <button type="submit" className="btn btn-primary">
+                Salvar
+            </button>
         </div>
-    </>
-  )
+    );
 }
 
-export default FormButtons
+FormButtons.propTypes = {
+    cancelTarget: PropTypes.string.isRequired
+};
+
+export default FormButtons;

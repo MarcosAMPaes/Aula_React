@@ -5,8 +5,8 @@ import Layout from "./Layout";
 import NotFound from "./NotFound";
 import Orders from "./Orders";
 import OrderDetails from "./OrderDetails";
-import Users from "./Users";
 import EditProduct from "./EditProduct";
+import Users from "./Users";
 import Authorization from "./Authorization";
 
 const App = () => {
@@ -15,11 +15,11 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="/products" element={<Authorization><Products /> </Authorization>} />
+                    <Route path="/users" element={<Authorization><Users /></Authorization>} />
+                    <Route path="/products" element={<Authorization><Products /></Authorization>} />
                     <Route path="/products/:id" element={<Authorization><EditProduct /></Authorization>} />
                     <Route path="/orders" element={<Authorization><Orders /></Authorization>} />
                     <Route path="/orders/:id" element={<Authorization><OrderDetails /></Authorization>} />
-                    <Route path="/users" element={<Authorization><Users /></Authorization>} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

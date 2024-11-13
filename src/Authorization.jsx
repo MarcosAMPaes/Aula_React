@@ -6,7 +6,7 @@ const Authorization = ({ children }) => {
     if (isAdmin()) {
         return children;
     } else {
-    	return <Navigate to="/"/>;
+        return <Navigate to="/" />;
     }
 };
 

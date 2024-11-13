@@ -4,13 +4,12 @@ import { useEffect, useState } from 'react';
 import api from "./axiosApi";
 import FormButtons from './FormButtons';
 import handleChange from './handleChange';
+import parseErrors from './parseErrors';
 import Loading from './Loading';
-import parseErros from './parseErros';
 
 const EditProduct = () => {
     const [inputs, setInputs] = useState({});
     const [errors, setErrors] = useState({});
-    const [modal, setModal] = useState(undefined);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -21,7 +20,8 @@ const EditProduct = () => {
 
     function loadProductById(id) {
         setLoading(true);
-        api.get(`obter_produto/${id}`)
+        const getProductEndpoint = `admin/obter_produto/${id}`;
+        api.get(getProductEndpoint)
             .then(response => {
                 setInputs(response.data);
             })
@@ -33,11 +33,12 @@ const EditProduct = () => {
             });
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         setLoading(true);
-        api.post("/alterar_produto", inputs)
-            .then((response) => {                
+        const editProductEndpoint = "admin/alterar_produto";
+        await api.post(editProductEndpoint, inputs)
+            .then((response) => {
                 if (response.status === 204) {
                     navigate("/products");
                 } else {
@@ -46,7 +47,7 @@ const EditProduct = () => {
             })
             .catch((error) => {
                 if (error && error.response && error.response.data)
-                    setErrors(parseErros(error.response.data));
+                    setErrors(parseErrors(error.response.data));
             })
             .finally(() => {
                 setLoading(false);

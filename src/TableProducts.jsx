@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import TableProductsLine from "./TableProductsLine"
 
 const TableProducts = ({ items, handleDeleteProduct }) => {
@@ -5,8 +6,8 @@ const TableProducts = ({ items, handleDeleteProduct }) => {
         <table className="table table-striped">
             <thead>
                 <tr>
-                    <th>Produto</th>
                     <th>Código</th>
+                    <th>Nome</th>
                     <th>Preço</th>
                     <th>Estoque</th>
                     <th>Ações</th>
@@ -16,7 +17,12 @@ const TableProducts = ({ items, handleDeleteProduct }) => {
                 {items.map(p => <TableProductsLine item={p} key={p.id} handleDeleteProduct={handleDeleteProduct} />)}
             </tbody>
         </table>
-    )
+    );
 }
+
+TableProducts.propTypes = {
+    items: PropTypes.array.isRequired,
+    handleDeleteProduct: PropTypes.func.isRequired
+};
 
 export default TableProducts;

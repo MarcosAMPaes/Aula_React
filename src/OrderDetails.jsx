@@ -1,32 +1,33 @@
 import { useEffect, useState } from 'react';
-import api from './axiosApi';
-import { useNavigate, useParams } from 'react-router-dom';
-import Loading from './Loading';
+import { useNavigate, useParams } from "react-router-dom";
 import { NumberFormatter, DateTimeFormatter, CurrencyFormatter, StringFormatter } from './formatters';
+import api from './axiosApi';
+import Loading from './Loading';
 
-function OrderDetails() {
+const OrderDetails = () => {
     const [order, setOrder] = useState(null);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
     const orderId = useParams().id;
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
-        api.get(`obter_pedido/${orderId}`)
+        const orderDetailsEndpoint = `admin/obter_pedido/${orderId}`;
+        api.get(orderDetailsEndpoint)
             .then(response => {
-                if (response.status === 200){
-                setOrder(response.data);
+                if (response.status === 200) {
+                    setOrder(response.data);
                 } else {
                     navigate("/orders")
                 }
             })
             .catch(error => {
-                //console.error('Erro ao carregar pedido: ', error);
+                console.error('Erro ao carregar pedido:', error);
                 navigate("/orders")
             })
             .finally(() => {
-                setLoading(false)
-            })
+                setLoading(false);
+            });
     }, [orderId]);
 
     if (!order) {
@@ -36,29 +37,29 @@ function OrderDetails() {
     return (
         <>
             {loading && <Loading />}
-            <h1 className="display-6 my-6">Detalhes do pedido</h1>
+            <h1 className="display-6 my-3">Detalhes de Pedido</h1>
             <hr />
-            <div className='card p-3 mb-3'>
-                <p className='m-0'>
-                    <b>Código do produto</b>{NumberFormatter.format(order.id, 6)}<br />
-                    <b>Horário do pedido</b>{DateTimeFormatter.format(new Date(order.data_hora))}<br />
-                    <b>Valor da compra</b>{CurrencyFormatter.format(order.valor_total)}<br />
-                    <b>Estado: </b>{StringFormatter.Capitalize(order.estado)}<br />
+            <div className="card p-3 mb-3">
+                <p className="m-0">
+                    <b>Código do Pedido: </b> {NumberFormatter.format(order.id, 6)} <br />
+                    <b>Data do Pedido: </b> {DateTimeFormatter.format(new Date(order.data_hora))} <br />
+                    <b>Valor Total: </b> {CurrencyFormatter.format(order.valor_total)} <br />
+                    <b>Estado: </b> {StringFormatter.Capitalize(order.estado)}
                 </p>
-                <p className='m-0'>
-                    <b>Cliente: </b>{order.cliente.nome}
+                <p className="m-0">
+                    <b>Cliente: </b> {order.cliente.nome}
                 </p>
                 <hr />
-                <p className='m-0'>
-                    <b>Itens do Pedido </b>
+                <p className="m-0">
+                    <b>Itens do Pedido</b>
                 </p>
-                <table className='table table-striped table-sm mb-0'>
+                <table className="table table-striped table-sm mb-0">
                     <thead>
                         <tr>
                             <th>Produto</th>
                             <th>Valor Unit.</th>
-                            <th>Quantidade</th>
-                            <th>Valor item</th>
+                            <th>Qtde.</th>
+                            <th>Valor Item</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,6 +76,6 @@ function OrderDetails() {
             </div>
         </>
     );
-}
+};
 
 export default OrderDetails;
