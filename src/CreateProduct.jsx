@@ -41,7 +41,6 @@ const CreateProduct = () => {
             setLoading(false);
             return;
         }
-
         const insertProductEndpoint = 'admin/inserir_produto';
         const formData = new FormData();
 
@@ -49,6 +48,7 @@ const CreateProduct = () => {
         Object.entries(inputs).forEach(([key, value]) => {
             formData.append(key, value);
         });
+        console.log(formData);
 
         // Adiciona a imagem, caso exista
         if (file) {
@@ -56,6 +56,7 @@ const CreateProduct = () => {
         }
 
         try {
+            console.log(formData);
             const response = await api.post(insertProductEndpoint, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
