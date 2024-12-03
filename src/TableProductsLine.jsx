@@ -2,28 +2,15 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { NumberFormatter, CurrencyFormatter } from './formatters';
 
-const TableProductsLine = ({ item, handleDeleteProduct, categories, handleCategoryChange }) => {
+const TableProductsLine = ({ item, handleDeleteProduct, categories }) => {
+    const currentCategory = categories.find((category) => category.id === item.id_categoria);
     return (
         <tr>
             <td>{NumberFormatter.format(item.id, 6)}</td>
             <td>{item.nome}</td>
             <td>{CurrencyFormatter.format(item.preco)}</td>
             <td>{NumberFormatter.format(item.estoque, 6)}</td>
-            <td>
-                {/* Select de categoria */}
-                <select
-                    value={item.id_categoria} // Valor inicial é a categoria atual
-                    onChange={(e) => handleCategoryChange(item.id, e.target.value)} // Atualiza a categoria
-                    className="form-select form-select-sm"
-                    aria-label="Selecione a categoria"
-                >
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                            {category.nome}
-                        </option>
-                    ))}
-                </select>
-            </td>
+            <td>{currentCategory ? currentCategory.nome : 'Categoria não encontrada'}</td>
             <td>
                 <button className="btn btn-outline-danger btn-sm" title="Excluir" onClick={() => handleDeleteProduct(item.id)}>
                     <i className="bi bi-trash"></i>
@@ -39,8 +26,8 @@ const TableProductsLine = ({ item, handleDeleteProduct, categories, handleCatego
 TableProductsLine.propTypes = {
     item: PropTypes.object.isRequired,
     handleDeleteProduct: PropTypes.func.isRequired,
-    categories: PropTypes.array.isRequired, // Recebe as categorias como prop
-    handleCategoryChange: PropTypes.func.isRequired // Função para atualizar a categoria
+    categories: PropTypes.array.isRequired,
+    handleCategoryChange: PropTypes.func.isRequired
 };
 
 export default TableProductsLine;

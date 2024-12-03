@@ -28,39 +28,39 @@ const ProductForm = ({ handleChange, handleFileChange, inputs, errors, categorie
                     />
                 </div>
                 <div className="col-6 mb-3">
-                    <CleaveInput 
-                        type="text" 
-                        field="preco" 
-                        label="Preço" 
-                        value={inputs?.preco || ''} // Garantir que inputs?.preco seja uma string válida
-                        onChange={handleChange} 
-                        error={errors?.preco} 
-                        options={{
-                            numeral: true, 
-                            numeralThousandsGroupStyle: 'thousand', 
-                            prefix: 'R$ ', 
-                            rawValueTrimPrefix: true, 
-                            delimiter: '.', 
-                            numeralDecimalMark: ',' 
-                        }} 
-                    />
+                <CleaveInput
+                    type="text"
+                    field="preco"
+                    label="Preço"
+                    value={inputs?.preco?.toString() || ''} // Garantir que seja string
+                    onChange={handleChange}
+                    error={errors?.preco}
+                    options={{
+                        numeral: true,
+                        numeralThousandsGroupStyle: 'thousand',
+                        prefix: 'R$ ',
+                        rawValueTrimPrefix: true,
+                        delimiter: '.',
+                        numeralDecimalMark: ',',
+                    }}
+                />
                 </div>
                 <div className="col-6 mb-3">
-                    <CleaveInput 
-                        type="text" 
-                        field="estoque"
-                        label="Estoque" 
-                        value={inputs?.estoque || ''} // Garantir que inputs?.estoque seja uma string válida
-                        onChange={handleChange}
-                        error={errors?.estoque}
-                        options={{
-                            numeral: true,
-                            numeralPositiveOnly: true,
-                            numeralThousandsGroupStyle: 'thousand',
-                            delimiter: '.',
-                            numeralDecimalMark: ',' 
-                        }} 
-                    />
+                <CleaveInput
+                    type="text"
+                    field="estoque"
+                    label="Estoque"
+                    value={inputs?.estoque?.toString() || ''} // Garantir que seja string
+                    onChange={handleChange}
+                    error={errors?.estoque}
+                    options={{
+                        numeral: true,
+                        numeralPositiveOnly: true,
+                        numeralThousandsGroupStyle: 'thousand',
+                        delimiter: '.',
+                        numeralDecimalMark: ',',
+                    }}
+                />
                 </div>
                 <div className="col-12 mb-3">
                     <label htmlFor="id_categoria" className="form-label">Categoria</label>
@@ -79,7 +79,7 @@ const ProductForm = ({ handleChange, handleFileChange, inputs, errors, categorie
                                 </option>
                             ))
                         ) : (
-                            <option disabled>Sem categorias disponíveis</option> // Caso não haja categorias
+                            <option disabled>Sem categorias disponíveis</option>
                         )}
                     </select>
                     {errors?.id_categoria && <div className="invalid-feedback">{errors.id_categoria}</div>}
@@ -103,10 +103,10 @@ const ProductForm = ({ handleChange, handleFileChange, inputs, errors, categorie
 
 ProductForm.propTypes = {
     handleChange: PropTypes.func.isRequired,
-    handleFileChange: PropTypes.func.isRequired,
+    handleFileChange: PropTypes.func,
     inputs: PropTypes.object.isRequired,
     errors: PropTypes.object,
-    categories: PropTypes.array.isRequired // Adicionando a lista de categorias
+    categories: PropTypes.array,
 };
 
 export default ProductForm;

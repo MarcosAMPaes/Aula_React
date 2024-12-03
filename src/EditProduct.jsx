@@ -11,12 +11,25 @@ const EditProduct = () => {
     const [inputs, setInputs] = useState({});
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
-
     const idProduto = useParams().id;
-    if (!idProduto) {
-        navigate("/products");
-    }
+
+    useEffect(() => {
+        api.get('/admin/obter_categorias')
+            .then(response => {
+                setCategories(response.data);
+            })
+            .catch(error => {
+                console.error("Erro ao carregar categorias:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (idProduto) {
+            loadProductById(idProduto);
+        }
+    }, [idProduto]);
 
     function loadProductById(id) {
         setLoading(true);
@@ -37,6 +50,7 @@ const EditProduct = () => {
         event.preventDefault();
         setLoading(true);
         const editProductEndpoint = "admin/alterar_produto";
+        console.log(inputs);
         await api.post(editProductEndpoint, inputs)
             .then((response) => {
                 if (response.status === 204) {
@@ -58,18 +72,18 @@ const EditProduct = () => {
         handleChange(event, inputs, setInputs);
     }
 
-    useEffect(() => {
-        setInputs({ ...inputs, id: idProduto });
-        loadProductById(idProduto);
-    }, [idProduto]);
-
     return (
         <>
             <div className="d-flex justify-content-between align-items-center">
                 <h1>Alteração de Produto</h1>
             </div>
             <form onSubmit={handleSubmit} noValidate autoComplete='off' className='mb-3'>
-                <ProductForm handleChange={localHandleChange} inputs={inputs} errors={errors} isNew={false} />
+                <ProductForm 
+                    handleChange={localHandleChange} 
+                    inputs={inputs} 
+                    errors={errors} 
+                    categories={categories}
+                />
                 <FormButtons cancelTarget="/products" />
             </form>
             {loading && <Loading />}

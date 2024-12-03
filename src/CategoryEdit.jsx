@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from './axiosApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductForm from './ProductForm';
+import CategoryForm from './CategoryForm';
 
 const CategoryEdit = () => {
   const { id } = useParams();
@@ -25,26 +26,30 @@ const CategoryEdit = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    api.post('admin/atualizar_categoria', { ...inputs, id })
-      .then(response => {
-        navigate('/categories'); // Redirecionar para a lista de categorias
-      })
-      .catch(error => {
-        if (error.response && error.response.data.errors) {
-          setErrors(error.response.data.errors); // Exibir erros de validação
-        }
-      });
+
+    const formData = new FormData();
+    Object.entries(inputs).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    // Enviar os dados como FormData
+    api.post('admin/alterar_categoria', formData)
+    .then(response => {
+      navigate('/categories');
+    })
+    .catch(error => {
+      if (error.response && error.response.data.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        console.error("Erro na requisição:", error);
+      }
+    });
   };
 
   return (
     <div className="container mt-4">
       <h3>Editar Categoria</h3>
-      <form onSubmit={handleSubmit}>
-        <ProductForm handleChange={handleChange} inputs={inputs} errors={errors} />
-        <div className="mb-3">
-          <button type="submit" className="btn btn-success">Salvar Alterações</button>
-        </div>
-      </form>
+        <CategoryForm handleSubmit={handleSubmit} handleChange={handleChange} inputs={inputs} errors={errors} />
     </div>
   );
 };

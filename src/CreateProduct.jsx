@@ -19,10 +19,12 @@ const CreateProduct = () => {
     useEffect(() => {
         api.get('/admin/obter_categorias')
             .then(response => {
+                console.log(response.data);
                 setCategories(response.data);
             })
             .catch(error => {
                 console.error("Erro ao carregar categorias:", error);
+                console.log(response.data)
             });
     }, []);
 
@@ -79,6 +81,7 @@ const CreateProduct = () => {
     }
 
     function handleFileChange(event) {
+        console.log("Arquivo selecionado:", event.target.files[0]);
         setFile(event.target.files[0]);
     }
 
@@ -88,13 +91,13 @@ const CreateProduct = () => {
                 <h1>Inclusão de Produto</h1>
             </div>
             <form onSubmit={handleSubmit} noValidate autoComplete="off" className="mb-3">
-                <ProductForm
-                    handleChange={localHandleChange}
-                    inputs={inputs}
-                    errors={errors}
-                    handleFileChange={handleFileChange}
-                    categories={categories}  // Passando categorias para o ProductForm
-                />
+            <ProductForm
+                handleChange={localHandleChange}
+                inputs={inputs}
+                errors={errors}
+                handleFileChange={handleFileChange}
+                categories={categories}
+            />
                 <FormButtons cancelTarget="/products" />
             </form>
             {loading && <Loading />}
