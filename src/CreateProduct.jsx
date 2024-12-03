@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import ProductForm from './ProductForm';
-import { useState } from 'react';
-import api from "./axiosApi";
+import { useState, useEffect } from 'react';
+import api from './axiosApi';
 import FormButtons from './FormButtons';
 import handleChange from './handleChange';
 import parseErrors from './parseErrors';
@@ -12,36 +12,66 @@ const CreateProduct = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
+
+    // Carregar categorias ao montar o componente
+    useEffect(() => {
+        api.get('/admin/obter_categorias')
+            .then(response => {
+                setCategories(response.data);
+            })
+            .catch(error => {
+                console.error("Erro ao carregar categorias:", error);
+            });
+    }, []);
 
     async function handleSubmit(event) {
         event.preventDefault();
         setLoading(true);
-        const insertProductEndpoint = "admin/inserir_produto";
+
+        // Validação: Verificar se a categoria foi selecionada
+        if (!inputs.id_categoria) {
+            setErrors(prev => ({
+                ...prev,
+                id_categoria: 'Por favor, selecione uma categoria.'
+            }));
+            setLoading(false);
+            return;
+        }
+
+        const insertProductEndpoint = 'admin/inserir_produto';
         const formData = new FormData();
+
+        // Adiciona todos os campos do formulário
         Object.entries(inputs).forEach(([key, value]) => {
             formData.append(key, value);
         });
+
+        // Adiciona a imagem, caso exista
         if (file) {
-            formData.append("imagem", file);
+            formData.append('imagem', file);
         }
-        await api.postForm(insertProductEndpoint, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        })
-            .then((response) => {
-                if (response.status === 201) {
-                    navigate("/products");
-                } else {
-                    console.log(response);
-                }
-            })
-            .catch((error) => {
-                if (error && error.response && error.response.data)
-                    setErrors(parseErrors(error.response.data));
-            })
-            .finally(() => {
-                setLoading(false);
+
+        try {
+            const response = await api.post(insertProductEndpoint, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
+            if (response.status === 201) {
+                navigate('/products');
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const parsedErrors = parseErrors(error.response.data);
+                setErrors(parsedErrors);
+            } else {
+                console.error('Erro inesperado:', error);
+            }
+        } finally {
+            setLoading(false);
+        }
     }
 
     function localHandleChange(event) {
@@ -57,8 +87,14 @@ const CreateProduct = () => {
             <div className="d-flex justify-content-between align-items-center">
                 <h1>Inclusão de Produto</h1>
             </div>
-            <form onSubmit={handleSubmit} noValidate autoComplete='off' className='mb-3'>
-                <ProductForm handleChange={localHandleChange} inputs={inputs} errors={errors} handleFileChange={handleFileChange} />
+            <form onSubmit={handleSubmit} noValidate autoComplete="off" className="mb-3">
+                <ProductForm
+                    handleChange={localHandleChange}
+                    inputs={inputs}
+                    errors={errors}
+                    handleFileChange={handleFileChange}
+                    categories={categories}  // Passando categorias para o ProductForm
+                />
                 <FormButtons cancelTarget="/products" />
             </form>
             {loading && <Loading />}

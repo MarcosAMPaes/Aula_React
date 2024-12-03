@@ -9,6 +9,9 @@ import EditProduct from "./EditProduct";
 import Users from "./Users";
 import Authorization from "./Authorization";
 import CreateProduct from "./CreateProduct";
+import CategoriesList from "./CategoriesList";  // Nova página
+import CategoryCreate from "./CategoryCreate";  // Nova página
+import CategoryEdit from "./CategoryEdit";  // Nova página
 
 const App = () => {
     return (
@@ -22,6 +25,11 @@ const App = () => {
                     <Route path="/products/create" element={<Authorization><CreateProduct /></Authorization>} />
                     <Route path="/orders" element={<Authorization><Orders /></Authorization>} />
                     <Route path="/orders/:id" element={<Authorization><OrderDetails /></Authorization>} />
+                    
+                    {/* Novas rotas para categorias */}
+                    <Route path="/categories" element={<Authorization><CategoriesList /></Authorization>} />
+                    <Route path="/categories/create" element={<Authorization><CategoryCreate /></Authorization>} />
+                    <Route path="/categories/edit/:id" element={<Authorization><CategoryEdit /></Authorization>} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

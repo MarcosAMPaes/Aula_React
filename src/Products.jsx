@@ -8,30 +8,41 @@ import { NavLink } from "react-router-dom";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [selectedProductId, setSelectedProductId] = useState(0);
     const [loading, setLoading] = useState(true);
 
-    const loadProducts = () => {
+    // Carregar produtos e categorias
+    const loadProductsAndCategories = () => {
         setLoading(true);
+
+        // Carregar produtos
         const productsEndpoint = "admin/obter_produtos";
-        api.get(productsEndpoint)
-            .then((response) => {
-                setProducts(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        const categoriesEndpoint = "admin/obter_categorias"; // Endpoint para obter categorias
+
+        Promise.all([
+            api.get(productsEndpoint),
+            api.get(categoriesEndpoint)
+        ])
+        .then(([productsResponse, categoriesResponse]) => {
+            setProducts(productsResponse.data);
+            setCategories(categoriesResponse.data); // Salvar categorias no estado
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
     }
 
+    // Função para excluir produto
     const deleteProduct = (productId) => {
         setLoading(true);
         api.postForm("admin/excluir_produto", {"id_produto": productId})
             .then(response => {
                 if (response.status === 204)
-                    loadProducts();
+                    loadProductsAndCategories();
             })
             .catch(error => {
                 console.error('Erro ao excluir produto:', error);
@@ -41,6 +52,27 @@ const Products = () => {
             });
     };
 
+    // Função para mudar categoria de um produto
+    const updateProductCategory = (productId, newCategoryId) => {
+        setLoading(true);
+        api.postForm("admin/alterar_categoria_produto", {
+            id_produto: productId,
+            id_categoria: newCategoryId
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    loadProductsAndCategories();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao alterar categoria do produto:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+    // Exibir modal de exclusão
     const handleDeleteProduct = (productId) => {
         setSelectedProductId(productId);
         const modal = new bootstrap.Modal(document.getElementById('modalDeleteProduct'));
@@ -48,19 +80,25 @@ const Products = () => {
     }
 
     useEffect(() => {
-        loadProducts();
+        loadProductsAndCategories();
     }, []);
 
     return (
         <>
             <NavLink to="/products/create" className="btn btn-primary my-3">Novo Produto</NavLink>
-            {products.length > 0 ?
+            {products.length > 0 ? (
                 <>
                     <ModalConfirm modalId="modalDeleteProduct" question="Deseja realmente excluir o produto?" confirmAction={() => deleteProduct(selectedProductId)} />
-                    <TableProducts items={products} handleDeleteProduct={handleDeleteProduct} /> 
-                </> :
-                (!loading && <NoProducts />)
-            }
+                    <TableProducts 
+                        items={products} 
+                        handleDeleteProduct={handleDeleteProduct} 
+                        categories={categories} // Passando as categorias para a tabela
+                        updateProductCategory={updateProductCategory} // Passando a função de atualizar categoria
+                    />
+                </>
+            ) : (
+                !loading && <NoProducts />
+            )}
             {loading && <Loading />}
         </>
     );

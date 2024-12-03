@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const SearchBar = ({ onSearch, title = ''}) => {
+const SearchBar = ({ onSearch, title = '', categories = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
+  // Função para manipular a mudança no campo de pesquisa
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    onSearch(value);
+    onSearch(value, selectedCategory); // Passa o termo de busca e a categoria selecionada
+  };
+
+  // Função para manipular a seleção da categoria
+  const handleCategoryChange = (event) => {
+    const value = event.target.value;
+    setSelectedCategory(value);
+    onSearch(searchTerm, value); // Passa o termo de busca atual e a nova categoria
   };
 
   return (
@@ -26,6 +35,24 @@ const SearchBar = ({ onSearch, title = ''}) => {
           <i className="bi bi-search"></i>
         </span>
       </div>
+
+      {/* Dropdown de categorias */}
+      {categories.length > 0 && (
+        <div className="mb-3">
+          <select
+            className="form-select"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+          >
+            <option value="">Todas as categorias</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   );
 };
